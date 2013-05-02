@@ -1,0 +1,32 @@
+name: TeleItems
+main: com.rocketmail.alextodaro.TeleItems.Main
+version: 0.1
+
+permissions:
+    ti.*:
+        description: Gives access to all TeleItems commands
+        children:
+            ti.sign.create: true
+            ti.sign.use: true
+            ti.map.use: true
+            ti.map.login: true
+        default: op
+    ti.basic:
+        description: Gives access to basic TeleItems commands
+        children:
+            ti.map.use: true
+            ti.map.login: true
+            ti.sign.us: true
+        default: true
+    ti.sign.use:
+        description: Allows you to use a TeleItems teleporter sign
+        default: true
+    ti.sign.create:
+        description: Allows you to create a TeleItems teleporter sign
+        default: op
+    ti.map.use:
+        description: Allows you to use the TeleItems teleporter
+        default: true
+    ti.map.login:
+        description: Allows you to recieve TeleItems teleporter on first login
+        default: true
