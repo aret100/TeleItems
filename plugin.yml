@@ -1,6 +1,10 @@
 name: TeleItems
 main: com.rocketmail.alextodaro.TeleItems.Main
-version: 0.1
+version: 0.2
+
+commands:
+    ti:
+        description: TeleItems commands
 
 permissions:
     ti.*:
@@ -10,6 +14,7 @@ permissions:
             ti.sign.use: true
             ti.map.use: true
             ti.map.login: true
+            ti.reload: true
         default: op
     ti.basic:
         description: Gives access to basic TeleItems commands
@@ -30,3 +35,6 @@ permissions:
     ti.map.login:
         description: Allows you to recieve TeleItems teleporter on first login
         default: true
+    ti.reload:
+        description: Allows you to reload locations file
+        default: op

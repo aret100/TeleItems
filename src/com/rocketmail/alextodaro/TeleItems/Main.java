@@ -6,9 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
@@ -43,7 +46,7 @@ public class Main extends JavaPlugin {
 		}
 	}
 
-	public void onEnable() {
+	public void reloadLocations() {
 		try {
 			locationFile = new File(getDataFolder(), "locations.yml");
 			if (!locationFile.exists()) {
@@ -58,21 +61,23 @@ public class Main extends JavaPlugin {
 				locations.set("inventoryname", "Locations");
 			}
 			if (!locations.contains("items")) {
-				ConfigurationSection items = locations.createSection("items");
-				for (int size = (locations.getInt("inventorysize") * 9), i = 0; i < size; i++) {
-					if (!items.contains("" + i)) {
-						ConfigurationSection sec = items.createSection("" + i);
-						sec.set("id", "0");
-						sec.set("name", "");
-						sec.set("location.x", "0");
-						sec.set("location.y", "0");
-						sec.set("location.z", "0");
-						sec.set("location.world", "");
-						sec.set("description", "");
-					}
-				}
-
+				locations.createSection("items");
 			}
+			ConfigurationSection items = locations
+					.getConfigurationSection("items");
+			for (int size = (locations.getInt("inventorysize") * 9), i = 0; i < size; i++) {
+				if (!items.contains("" + i)) {
+					ConfigurationSection sec = items.createSection("" + i);
+					sec.set("id", "0");
+					sec.set("name", "");
+					sec.set("location.x", "0");
+					sec.set("location.y", "0");
+					sec.set("location.z", "0");
+					sec.set("location.world", "");
+					sec.set("description", "");
+				}
+			}
+
 			saveLocationFile();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,18 +101,45 @@ public class Main extends JavaPlugin {
 				ItemMeta im = is.getItemMeta();
 				im.setDisplayName(name);
 				List<String> lorelist = new ArrayList<String>();
-				for (String s : lores.split(",")) {
-					lorelist.add(s);
+				if (lores.length() > 0) {
+					for (String s : lores.split(",")) {
+						lorelist.add(s);
+					}
 				}
 				im.setLore(lorelist);
 				is.setItemMeta(im);
 				locInv.setItem(i, is);
 				World w = Bukkit.getWorld(world);
-				getLogger().info("Loading location " + i + ", " + w.getName() + ", " + x + ", " + y + ", "  + z);
+				getLogger().info(
+						"Loading location " + i + ", " + w.getName() + ", " + x
+								+ ", " + y + ", " + z);
 				itemLocations.put(Integer.valueOf(i), new Location(w, x, y, z));
 			}
 
 		}
+	}
 
+	public void onEnable() {
+		reloadLocations();
+
+	}
+
+	public boolean onCommand(CommandSender sender, Command cmd, String label,
+			String[] args) {
+		if (label.equalsIgnoreCase("ti")) {
+			if (args.length >= 1) {
+				if (args[0].equalsIgnoreCase("reload")) {
+					if (sender.hasPermission("ti.reload")) {
+						sender.sendMessage("Reloading...");
+						reloadLocations();
+						return true;
+					}
+					sender.sendMessage(ChatColor.RED
+							+ "You do not have permission to do that!");
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

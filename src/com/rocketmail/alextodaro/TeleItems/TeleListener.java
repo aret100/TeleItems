@@ -103,7 +103,9 @@ public class TeleListener implements Listener {
 			event.setCancelled(true);
 			Integer i = Integer.valueOf(slot);
 			Location teleLoc = Main.itemLocations.get(i);
-			player.teleport(teleLoc);
+			if(teleLoc != null){
+				player.teleport(teleLoc);
+			}
 		}
 
 	}
