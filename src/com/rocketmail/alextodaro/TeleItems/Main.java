@@ -26,7 +26,7 @@ public class Main extends JavaPlugin {
 	public int size;
 	public static Inventory locInv;
 	public static HashMap<Integer, Location> itemLocations = new HashMap<Integer, Location>();
-	public static ItemStack teleMap = new ItemStack(395);
+	public static ItemStack teleMap = new ItemStack(2256);
 
 	public void saveLocationFile() {
 		Bukkit.getServer().getPluginManager()
@@ -130,7 +130,7 @@ public class Main extends JavaPlugin {
 			if (args.length >= 1) {
 				if (args[0].equalsIgnoreCase("reload")) {
 					if (sender.hasPermission("ti.reload")) {
-						sender.sendMessage("Reloading...");
+						sender.sendMessage("Reloadingpeeeeee..");
 						reloadLocations();
 						return true;
 					}
